@@ -1,15 +1,25 @@
 class EventProcessor():
-  def process (message):
-    return {
-    #example
-        0: forward(message),
-        1: forward(message)
-            react(message)
 
-    }.get(message.kind, "nothing")
+    def __init__(self, messageHandler, reactor):
+        self.messageHandler = messageHandler
+        self.reactor = reactor
 
-def forward(self, message):
-  #send to Connection Plugin to send to other users
+    def process(self, event):
+        forward(event)
+        if event.ownWarning:
+            react_internal(event)
 
-def react(self, message):
-  #send to the reactors
+    def react_external(self, event):
+        distance = compute_distance(event.location)
+        warning = Warning(event, distance)
+        reactor.react(warning)
+
+    def react_internal(self, event):
+        warning = Warning(event)
+        reactor.react(warning)
+
+    def forward(self, event):
+        messageHandle.handle(event)
+
+    def compute_distance(location):
+        #currlocation - location
