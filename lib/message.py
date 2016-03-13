@@ -5,7 +5,8 @@ class Message():
         self.addr = addr
         self.insistence = insistence
         self.sender = sender
-        self.id = currId++
+        self.id = currId
+        currId = currId + 1
 
     def fullId(self):
         return self.id+"-"+self.sender

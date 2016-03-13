@@ -4,13 +4,19 @@ import glob
 import sys
 
 lib_dir = os.sep.join( os.path.abspath(__file__).split('/')[:-2] + ['lib'] )
-plugin_dir = lib_dir + os.sep + 'plugins'
+
+plugin_dir = lib_dir + os.sep + 'plugin'
 
 # Adds current project to path
 sys.path.insert(0, lib_dir)
 sys.path.insert(0, plugin_dir)
 
 modules = []
+
+for root, directories, filenames in os.walk(lib_dir):
+    for file in filenames:
+        if file.endswith('.py'):
+            modules.append(file[:-3])
 
 # Loads plugin files
 for root, directories, filenames in os.walk(plugin_dir):
@@ -20,11 +26,11 @@ for root, directories, filenames in os.walk(plugin_dir):
     for file in filenames:
         if file.endswith('.py'):
             modules.append(file[:-3])
-            print(file)
-
+            
 for m in modules:
-    print(m)
     __import__(m, locals(), globals())
+
+
 
 from event_processor import EventProcessor
 

@@ -17,8 +17,7 @@ class MessageHandler():
             cls._singleton = super(MessageHandler, cls).__new__(cls)
         return cls._singleton
 
-    def __init__(self, processor=None):
-        self.processor = processor
+    def __init__(self):
         self.plugin = ConnectionPlugin.active_plugin()
         self.plugin.start()
 
@@ -32,11 +31,7 @@ class MessageHandler():
         insist = __insistance(event.lifetime)
         msg = Message(event, addr, insist, sender)
         self.broadcast(msg)
-
-    def handle(self, event):
-        from event_processor import msg_received
-        self.processor.fire(msg_received(event))
-
+        
     def __insistance(lifetime):
         # TODO: find a better formula for this
         return 0.3 * lifetime
