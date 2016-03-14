@@ -3,7 +3,6 @@ import threading
 class ConnectionPlugin(threading.Thread):
 
     def init(self):
-        # threading.Thread(target=self).start()
         threading.Thread.__init__(self)
 
     @classmethod

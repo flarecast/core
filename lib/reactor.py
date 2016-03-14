@@ -7,8 +7,8 @@ class Reactor():
             plugin = c()
             ek = c.event_kinds
             for e in ek:
-                print(e)
-                cls.event_kinds[e] = plugin 
+                cls.event_kinds[e] = plugin
+
     @classmethod
     def react(cls, alert):
         cls.event_kinds[alert.kind].react(alert)

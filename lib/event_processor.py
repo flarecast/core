@@ -4,10 +4,6 @@ from reactor import Reactor
 from detector import Detector
 from alert import Alert
 
-from reactor import Reactor
-from detector import Detector
-from alert import Alert
-
 class msg_received(Event):
     """Message Received Event"""
 
@@ -15,8 +11,6 @@ class detection_received(Event):
     """Detection Received Event"""
 
 class EventProcessor(Component):
-    MSG_RECEIVED = 1
-    DETECTION_RECEIVED = 2
     _singleton = None
 
     def __new__(cls, *args, **kwargs):
@@ -26,23 +20,22 @@ class EventProcessor(Component):
 
     def __init__(self):
         super(EventProcessor, self).__init__()
-        #self.messageHandler = MessageHandler(self)
+        self.message_handler = MessageHandler()
         Detector.start_plugins()
         Reactor.add_plugin_events()
-
-    def react_external(self, event):
-        distance = compute_distance(event.location)
-        alert = Alert(event, distance)
-        Reactor.react(alert)
 
     def react_internal(self, event):
         alert = Alert(event)
         Reactor.react(alert)
 
-    def compute_distance(location):
-
+    def compute_distance(self, location):
         #TODO: currlocation - location
         return 13
+
+    def react_external(self, event):
+        distance = self.compute_distance(event.location)
+        alert = Alert(event, distance)
+        Reactor.react(alert)
 
     @handler("msg_received")
     def msg_received(self, *args):
@@ -50,12 +43,16 @@ class EventProcessor(Component):
 
     @handler("detection_received")
     def detection_received(self, *args):
-        self.react_internal(args[0])
-        #self.message_handler.emit_event(args[0])
+        event = args[0]
+        if event.own_warning:
+            self.react_internal(event)
+
+        self.message_handler.emit_event(event)
 
     @classmethod
     def handle_detection(cls, event):
         cls._singleton.fire(detection_received(event))
+
     @classmethod
     def handle_message(cls, event):
         cls._singleton.fire(msg_received(event))
