@@ -5,7 +5,7 @@ import sys
 
 lib_dir = os.sep.join( os.path.abspath(__file__).split('/')[:-2] + ['lib'] )
 
-plugin_dir = lib_dir + os.sep + 'plugin'
+plugin_dir = lib_dir + os.sep + 'plugins'
 
 # Adds current project to path
 sys.path.insert(0, lib_dir)
@@ -26,7 +26,7 @@ for root, directories, filenames in os.walk(plugin_dir):
     for file in filenames:
         if file.endswith('.py'):
             modules.append(file[:-3])
-            
+
 for m in modules:
     __import__(m, locals(), globals())
 
