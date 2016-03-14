@@ -31,7 +31,6 @@ for m in modules:
     __import__(m, locals(), globals())
 
 
-
 from event_processor import EventProcessor
 
 class App():

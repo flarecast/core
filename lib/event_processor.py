@@ -1,5 +1,8 @@
 from circuits import Component, Event, handler
 from message_handler import MessageHandler
+from reactor import Reactor
+from detector import Detector
+from alert import Alert
 
 from reactor import Reactor
 from detector import Detector
@@ -37,7 +40,8 @@ class EventProcessor(Component):
         Reactor.react(alert)
 
     def compute_distance(location):
-        #currlocation - location
+
+        #TODO: currlocation - location
         return 13
 
     @handler("msg_received")
