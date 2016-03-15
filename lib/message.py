@@ -12,4 +12,4 @@ class Message():
         return self.id+"-"+self.sender
 
     def has_expired(self):
-        return event.has_expired
+        return self.event.has_expired

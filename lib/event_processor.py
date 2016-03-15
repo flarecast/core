@@ -46,7 +46,6 @@ class EventProcessor(Component):
         event = args[0]
         if event.own_warning:
             self.react_internal(event)
-
         self.message_handler.emit_event(event)
 
     @classmethod

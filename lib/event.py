@@ -1,4 +1,4 @@
-import time
+﻿import time
 
 class Event():
     def __init__(self, location, direction, kind, own_warning,timestamp, lifetime, extra = None):
