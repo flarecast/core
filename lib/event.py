@@ -1,11 +1,11 @@
 import time
 
 class Event():
-    def __init__(self, location, direction, kind, ownWarning,timestamp, lifetime, extra = None):
+    def __init__(self, location, direction, kind, own_warning,timestamp, lifetime, extra = None):
         self.location = location 
         self.direction = direction
         self.kind = kind
-        self.ownWarning = ownWarning
+        self.own_warning = own_warning
         self.timestamp = timestamp
         self.lifetime = lifetime
         self.extra = extra
