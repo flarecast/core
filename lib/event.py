@@ -11,5 +11,5 @@ class Event():
         self.extra = extra
 
     def has_expired(self):
-        return (timestamp+lifetime) > time.time()
+        return (timestamp+lifetime) < time.time()
   

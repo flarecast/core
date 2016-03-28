@@ -11,4 +11,5 @@ class TestDetector(Detector):
         return Event(1, 1, "input", False, time.time(), 10000, text )
 
     def run(self):
-        self.wait_input()
+        while True:
+            self.wait_input()

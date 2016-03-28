@@ -8,7 +8,7 @@ def on_message(f):
         from event_processor import EventProcessor
         msg = f(*args)
         EventProcessor.handle_message(msg.event)
-        MessageHandler._singleton.emit_event(msg.event, msg.sender)
+        MessageHandler._singleton.emit_event(msg.event, msg.sender, msg.id)
 
     return callback
 
@@ -53,10 +53,13 @@ class MessageHandler():
     def __clear_messages(self):
         self.processed_messages = [m for m in self.processed_messages if not m.has_expired()] # ily Python
 
-    def emit_event(self, event, sender = None):
+    def emit_event(self, event, sender = None, msg_id = None):
         addr = self.plugin.address()
         insist = MessageHandler.__insistance(event.lifetime)
         if sender is None: sender = addr
-        msg = Message(event, addr, insist, sender)
+        if msg_id is not None: 
+            msg = Message(event, addr, insist, sender, msg_id)
+        else:
+            msg = Message(event, addr, insist, sender)
         self.broadcast(msg)
 
