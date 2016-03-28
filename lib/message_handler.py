@@ -40,9 +40,9 @@ class MessageHandler():
     def __was_processed(msgs, msg):
         for m in msgs:
             if m.full_id() == msg.full_id():
-                return False
+                return True
 
-        return True
+        return False
 
     def __process_message(self, msg):
         b = not MessageHandler.__was_processed(self.processed_messages, msg)
