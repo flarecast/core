@@ -1,7 +1,17 @@
-
 # Created by https://www.gitignore.io/api/python
-
 .DS_Store
+
+### Blueflare ###
+# Don't add active plugins to the core repository
+lib/plugins/communication
+lib/plugins/reaction
+lib/plugins/detection
+bin/communication
+bin/reaction
+bin/detection
+config/communication
+config/reaction
+config/detection
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
