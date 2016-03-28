@@ -1,0 +1,3 @@
+[submodule "lib/plugins/communication/bluetooth-connection-plugin"]
+	path = lib/plugins/communication/bluetooth-connection-plugin
+	url = git@gitlab.com:blueflare/bluetooth-connection-plugin.git
