@@ -1,3 +1,3 @@
-# BlueFlare Core
+# FlareCast
 
-Core code for the BlueFlare project
+Core functionality of the FlareCast project
