@@ -22,6 +22,7 @@ class EventProcessor(Component):
     def __init__(self):
         super(EventProcessor, self).__init__()
         self.message_handler = MessageHandler()
+        self.gps = GPS()
         Message.init()
         Detector.start_plugins()
         Reactor.add_plugin_events()
@@ -31,8 +32,8 @@ class EventProcessor(Component):
         Reactor.react(alert)
 
     def compute_distance(self, location):
-        #TODO: currlocation - location
-        return 13
+        current_location = self.gps.get_current_coordinates()
+        return GPS.distance_between(current_location, location)
 
     def react_external(self, event):
         distance = self.compute_distance(event.location)
