@@ -4,6 +4,7 @@ from message import Message
 from reactor import Reactor
 from detector import Detector
 from alert import Alert
+from gps import GPS
 
 class msg_received(Event):
     """Message Received Event"""

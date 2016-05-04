@@ -4,7 +4,6 @@ from event import *
 import gps
 
 class TestDetector(Detector):
-
     @on_event
     def wait_input(self):
         text = input("> ")

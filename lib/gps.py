@@ -9,7 +9,7 @@ class GPS:
     CONN_PORT = 21
     BACKLOG = 1
     RECEIVE_SIZE = 1024
-    ADDRESS_FILE = "bluetooth_address.txt"
+    ADDRESS_FILE = "bluetooth_address"
 
     def __init__(self):
         self.bluetooth_mac_address = GPS.get_bluetooth_address(GPS.ADDRESS_FILE)
