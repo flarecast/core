@@ -10,12 +10,12 @@ class GPS:
     BACKLOG = 1
     RECEIVE_SIZE = 1024
     ADDRESS_FILE = "bluetooth_address.txt"
-        
+
     def __init__(self):
-        self.bluetooth_mac_address = GPS.get_bluetooth_address(GPS.ADDRESS_FILE)       
+        self.bluetooth_mac_address = GPS.get_bluetooth_address(GPS.ADDRESS_FILE)
         self.server_socket = self.set_bluetooth_socket(self.bluetooth_mac_address)
         self.client_socket = self.create_client_connection(self.server_socket)
-    
+
     def set_bluetooth_socket(self, hostMACAddress):
       s = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
       s.bind((hostMACAddress, GPS.CONN_PORT))
@@ -34,15 +34,20 @@ class GPS:
         self.client_socket.send("gps-data\n")
         data = self.client_socket.recv(GPS.RECEIVE_SIZE).decode("utf-8")
         if data:
-          return data
+          return GPS.to_tuple(data)
       except Exception as e:
-        print(e) 
+        print(e)
         client_socket.close()
 
-    @classmethod    
+    @classmethod
     def get_bluetooth_address(cls, filename):
         f = open(os.path.realpath(filename), 'r')
         return f.read()
+
+    @classmethod
+    def to_tuple(cls, str):
+        points = str.split(" ")
+        return (float(points[0]), float(points[1]))
 
     @classmethod
     def distance_between(cls, p1, p2):
@@ -69,4 +74,4 @@ class GPS:
         if neg and big: theta = 2*math.pi - abs(diff); lr = +1
 
         return (theta*57.2957795, lr)
-        
+
