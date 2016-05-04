@@ -1,7 +1,7 @@
 ﻿import threading
 from detector import *
 from event import *
-import gps
+from gps import GPS
 
 class TestDetector(Detector):
     @on_event
