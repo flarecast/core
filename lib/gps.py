@@ -13,8 +13,6 @@ class GPS:
 
     def __init__(self):
         self.bluetooth_mac_address = GPS.get_bluetooth_address(GPS.ADDRESS_FILE)
-        self.server_socket = self.set_bluetooth_socket(self.bluetooth_mac_address)
-        self.client_socket = self.create_client_connection(self.server_socket)
 
     def set_bluetooth_socket(self, hostMACAddress):
       s = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
@@ -30,6 +28,14 @@ class GPS:
         server_socket.close()
 
     def get_current_coordinates(self):
+        self.server_socket = self.set_bluetooth_socket(self.bluetooth_mac_address)
+        self.client_socket = self.create_client_connection(self.server_socket)
+        coords = self.request_coordinates
+        client_socket.close()
+        server_socket.close()
+        return coords
+
+    def request_coordinates(self):
       try:
         self.client_socket.send("gps-data\n")
         data = self.client_socket.recv(GPS.RECEIVE_SIZE).decode("utf-8")
