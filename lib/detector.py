@@ -1,6 +1,5 @@
 import threading
 
-
 def on_event(f):
     from event_processor import EventProcessor
     def callback(*args):
@@ -10,8 +9,6 @@ def on_event(f):
     return callback
 
 class Detector(threading.Thread):
-
-
     def __init__(self):
         threading.Thread.__init__(self)
 

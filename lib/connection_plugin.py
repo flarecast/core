@@ -1,7 +1,6 @@
 import threading
 
 class ConnectionPlugin(threading.Thread):
-
     def init(self):
         threading.Thread.__init__(self)
 
