@@ -1,62 +1,49 @@
-# TODO: Change _singleton to __singleton
 from connection_plugin import ConnectionPlugin
 from message import Message
 import threading
+import time
 
 def on_message(f):
+    handler = MessageHandler.__singleton
     def callback(*args):
         from event_processor import EventProcessor
         msg = f(*args)
-        EventProcessor.handle_message(msg.event)
-        MessageHandler._singleton.emit_event(msg.event, msg.sender, msg.id)
+
+        if(handler.__valid_message(msg)):
+            EventProcessor.handle_message(msg.event)
+            handler.emit_event(msg.event, msg.sender, msg.id)
+        else:
+            # Register the sender of the message
+            # in case multiple people are sending us the same message
+            # that way we won't send to them
+            Message.register(msg.id, {msg.sender})
 
     return callback
 
 class MessageHandler():
-    _singleton = None
+    __singleton = None
+    REMOVAL_INTERVAL = 1800
 
     # Singleton Pattern implementation
     def __new__(cls, *args, **kwargs):
-        if cls._singleton is None:
-            cls._singleton = super(MessageHandler, cls).__new__(cls)
-        return cls._singleton
+        if cls.__singleton is None:
+            cls.__singleton = super(MessageHandler, cls).__new__(cls)
+        return cls.__singleton
 
     def __init__(self):
-        self.processed_messages = []
         self.plugin = ConnectionPlugin.active_plugin()
         self.plugin.start()
 
     def broadcast(self, msg):
         # TODO: check if this print is needed
         print(self.plugin.__class__.__name__)
-        if( self.__process_message(msg) ):
-            self.plugin.broadcast(msg)
-            self.__clear_messages()
 
-    @staticmethod
-    def __insistance(lifetime):
-        # TODO: find a better formula for this
-        return 0.3 * lifetime
-
-    @staticmethod
-    def __was_processed(msgs, msg):
-        for m in msgs:
-            if m.full_id() == msg.full_id():
-                return True
-
-        return False
-
-    def __process_message(self, msg):
-        b = not MessageHandler.__was_processed(self.processed_messages, msg)
-        if b: self.processed_messages.append(msg)
-        return b
-
-    def __clear_messages(self):
-        self.processed_messages = [m for m in self.processed_messages if not m.has_expired()] # ily Python
+        Message.register(msg.id, [msg.event_creator, msg.sender])
+        self.plugin.broadcast(msg)
 
     def emit_event(self, event, sender = None, msg_id = None):
         addr = self.plugin.address()
-        insist = MessageHandler.__insistance(event.lifetime)
+        insist = MessageHandler.__insistence(event.lifetime)
         if sender is None: sender = addr
         if msg_id is not None:
             msg = Message(event, addr, insist, sender, msg_id)
@@ -64,3 +51,11 @@ class MessageHandler():
             msg = Message(event, addr, insist, sender)
         self.broadcast(msg)
 
+    @staticmethod
+    def __insistence(lifetime):
+        # TODO: find a better formula for this
+        return 0.3 * lifetime
+
+    @staticmethod
+    def __valid_message(msg):
+        return Message.get(msg.id) is None and not msg.has_expired()
