@@ -27,6 +27,7 @@ class MessageHandler():
         self.plugin.start()
 
     def broadcast(self, msg):
+        # TODO: check if this print is needed
         print(self.plugin.__class__.__name__)
         if( self.__process_message(msg) ):
             self.plugin.broadcast(msg)
@@ -57,7 +58,7 @@ class MessageHandler():
         addr = self.plugin.address()
         insist = MessageHandler.__insistance(event.lifetime)
         if sender is None: sender = addr
-        if msg_id is not None: 
+        if msg_id is not None:
             msg = Message(event, addr, insist, sender, msg_id)
         else:
             msg = Message(event, addr, insist, sender)
