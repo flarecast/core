@@ -4,7 +4,7 @@ import threading
 import time
 
 def on_message(f):
-    handler = MessageHandler.__singleton
+    handler = MessageHandler._singleton
     def callback(*args):
         from event_processor import EventProcessor
         msg = f(*args)
@@ -21,14 +21,14 @@ def on_message(f):
     return callback
 
 class MessageHandler():
-    __singleton = None
+    _singleton = None
     REMOVAL_INTERVAL = 1800
 
     # Singleton Pattern implementation
     def __new__(cls, *args, **kwargs):
-        if cls.__singleton is None:
-            cls.__singleton = super(MessageHandler, cls).__new__(cls)
-        return cls.__singleton
+        if cls._singleton is None:
+            cls._singleton = super(MessageHandler, cls).__new__(cls)
+        return cls._singleton
 
     def __init__(self):
         self.plugin = ConnectionPlugin.active_plugin()
