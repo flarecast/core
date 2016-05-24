@@ -36,7 +36,6 @@ class Message():
         reg_addrs = cls.__get(msg_id)
         saved_addrs = addrs if reg_addrs is None else reg_addrs | addrs
         cls.__set(msg_id, saved_addrs)
-        print("REGISTERED ", msg_id, ": ", saved_addrs)
 
     @classmethod
     def addrs(cls, msg_id):

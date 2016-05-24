@@ -37,9 +37,6 @@ class MessageHandler():
         self.plugin.start()
 
     def broadcast(self, msg):
-        # TODO: check if this print is needed
-        print(self.plugin.__class__.__name__)
-        print("BROADCASTING")
         Message.register(msg.id, {msg.event_creator(), msg.sender})
         self.plugin.broadcast(msg)
 
@@ -60,7 +57,4 @@ class MessageHandler():
 
     @staticmethod
     def _valid_message(msg):
-        print("VALIDATION")
-        print(Message.addrs(msg.id))
-        print(msg.has_expired())
         return Message.addrs(msg.id) is None and not msg.has_expired()
