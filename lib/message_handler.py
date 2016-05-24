@@ -4,18 +4,20 @@ import threading
 import time
 
 def on_message(f):
-    handler = MessageHandler._singleton
     def callback(*args):
         from event_processor import EventProcessor
+        handler = MessageHandler()
         msg = f(*args)
 
-        if(handler.__valid_message(msg)):
+        if(handler._valid_message(msg)):
+            print("RECEIVED A VALID MESSAGE")
             EventProcessor.handle_message(msg.event)
             handler.emit_event(msg.event, msg.sender, msg.id)
         else:
             # Register the sender of the message
             # in case multiple people are sending us the same message
             # that way we won't send to them
+            print("RECEIVED AN INVALID MESSAGE")
             Message.register(msg.id, {msg.sender})
 
     return callback
@@ -37,8 +39,8 @@ class MessageHandler():
     def broadcast(self, msg):
         # TODO: check if this print is needed
         print(self.plugin.__class__.__name__)
-
-        Message.register(msg.id, [msg.event_creator, msg.sender])
+        print("BROADCASTING")
+        Message.register(msg.id, {msg.event_creator(), msg.sender})
         self.plugin.broadcast(msg)
 
     def emit_event(self, event, sender = None, msg_id = None):
@@ -57,5 +59,8 @@ class MessageHandler():
         return 0.3 * lifetime
 
     @staticmethod
-    def __valid_message(msg):
-        return Message.get(msg.id) is None and not msg.has_expired()
+    def _valid_message(msg):
+        print("VALIDATION")
+        print(Message.addrs(msg.id))
+        print(msg.has_expired())
+        return Message.addrs(msg.id) is None and not msg.has_expired()
