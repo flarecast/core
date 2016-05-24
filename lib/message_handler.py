@@ -6,7 +6,7 @@ import time
 def on_message(f):
     def callback(*args):
         from event_processor import EventProcessor
-        handler = MessageHandler()
+        handler = MessageHandler._singleton
         msg = f(*args)
 
         if(handler._valid_message(msg)):
