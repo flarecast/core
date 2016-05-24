@@ -81,7 +81,7 @@ function remove_plug() {
 }
 
 function create_and_move() {
-  origin=$1
+  origin=$(readlink -f $1)
   destination=$2
 
   if [ ! -d $origin ]; then
@@ -94,7 +94,7 @@ function create_and_move() {
     mkdir -p $destination
   fi
 
-  ln -s "$origin/" "$destination/"
+  ln -s "$origin/"* "$destination"
 }
 
 if [ ! -d $LIB ]; then
