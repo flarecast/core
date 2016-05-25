@@ -1,8 +1,8 @@
 ﻿import time
 
 class Event():
-    def __init__(self, location, direction, kind, own_warning,timestamp, lifetime, extra = None):
-        self.location = location 
+    def __init__(self, location, direction, kind, own_warning, timestamp, lifetime, extra = None):
+        self.location = location
         self.direction = direction
         self.kind = kind
         self.own_warning = own_warning
@@ -11,5 +11,5 @@ class Event():
         self.extra = extra
 
     def has_expired(self):
-        return (timestamp+lifetime) < time.time()
-  
+        return time.time() > (self.timestamp + self.lifetime)
+

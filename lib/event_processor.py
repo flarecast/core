@@ -1,5 +1,6 @@
 from circuits import Component, Event, handler
 from message_handler import MessageHandler
+from message import Message
 from reactor import Reactor
 from detector import Detector
 from alert import Alert
@@ -21,6 +22,7 @@ class EventProcessor(Component):
     def __init__(self):
         super(EventProcessor, self).__init__()
         self.message_handler = MessageHandler()
+        Message.init()
         Detector.start_plugins()
         Reactor.add_plugin_events()
 
