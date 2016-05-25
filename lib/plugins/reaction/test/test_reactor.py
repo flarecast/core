@@ -5,3 +5,4 @@ class TestReactor(Reactor):
 
     def react(self, alert):
         print("RECEIVED INPUT: " + alert.extra)
+        print("IT WAS ", alert.distance, "m FROM HERE")
