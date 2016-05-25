@@ -13,37 +13,34 @@ class GPS:
 
     def __init__(self):
         self.bluetooth_mac_address = GPS.get_bluetooth_address(GPS.ADDRESS_FILE)
-
-    def set_bluetooth_socket(self, hostMACAddress):
-      s = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-      s.bind((hostMACAddress, GPS.CONN_PORT))
-      s.listen(GPS.BACKLOG)
-      return s
-
-    def create_client_connection(self, server_socket):
-      try:
-        client, _x = server_socket.accept()
-        return client
-      except:
-        server_socket.close()
-
-    def get_current_coordinates(self):
         self.server_socket = self.set_bluetooth_socket(self.bluetooth_mac_address)
         self.client_socket = self.create_client_connection(self.server_socket)
-        coords = self.request_coordinates
-        client_socket.close()
-        server_socket.close()
-        return coords
+
+    def set_bluetooth_socket(self, hostMACAddress):
+        s = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+        s.bind((hostMACAddress, GPS.CONN_PORT))
+        s.listen(GPS.BACKLOG)
+        return s
+
+    def create_client_connection(self, server_socket):
+        try:
+            client, _x = server_socket.accept()
+            return client
+        except:
+            server_socket.close()
+
+    def get_current_coordinates(self):
+        return self.request_coordinates()
 
     def request_coordinates(self):
-      try:
-        self.client_socket.send("gps-data\n")
-        data = self.client_socket.recv(GPS.RECEIVE_SIZE).decode("utf-8")
-        if data:
-          return GPS.to_tuple(data)
-      except Exception as e:
-        print(e)
-        client_socket.close()
+        try:
+            self.client_socket.send("gps-data\n")
+            data = self.client_socket.recv(GPS.RECEIVE_SIZE).decode("utf-8")
+            if data:
+              return GPS.to_tuple(data)
+        except Exception as e:
+            print(e)
+            client_socket.close()
 
     @classmethod
     def get_bluetooth_address(cls, filename):
