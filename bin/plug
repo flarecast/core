@@ -81,12 +81,13 @@ function remove_plug() {
 }
 
 function create_and_move() {
-  origin=$(readlink -f $1)
-  destination=$2
-
-  if [ ! -d $origin ]; then
+  if [ -d $1 ];
+    then origin=$(cd $1; pwd)
+  else
     return ;
   fi
+
+  destination=$2
 
   echo "Plugging $destination..."
 
