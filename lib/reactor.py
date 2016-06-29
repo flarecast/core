@@ -7,8 +7,15 @@ class Reactor():
             plugin = c()
             ek = c.event_kinds
             for e in ek:
-                cls.event_kinds[e] = plugin
+                if e in cls.event_kinds.keys():
+                    cls.event_kinds[e].append(plugin)
+                else:
+                    cls.event_kinds[e] = [plugin]
 
     @classmethod
     def react(cls, alert):
-        cls.event_kinds[alert.kind].react(alert)
+        if not alert.kind in cls.event_kinds.keys():
+            return None
+
+        for reactor in cls.event_kinds[alert.kind]:
+            reactor.react(alert)
